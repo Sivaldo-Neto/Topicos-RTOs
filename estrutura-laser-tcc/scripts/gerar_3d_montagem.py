@@ -50,7 +50,11 @@ def back_tab_z_centers():
     return zs
 
 
-def side_panel(x0: float) -> cq.Workplane:
+RES_SHELF_Z = 40.0
+RES_TAB_Y = (28.0, 72.0)
+
+
+def side_panel(x0: float, reservoir_slots: bool = False) -> cq.Workplane:
     p = box_at(x0, 0, 0, T, D, H)
     y_tab = INNER_D / 2
     # entalhe base / tampa
@@ -62,6 +66,9 @@ def side_panel(x0: float) -> cq.Workplane:
     # slot prateleira (interno)
     p = p.cut(box_at(x0 - 0.05, y_tab - TAB_W / 2, SHELF_TOP - T, T + 0.1, TAB_W, T))
     p = p.cut(hole_x(x0 - 0.05, D - 22, 28, HOSE_D / 2, T + 0.1))
+    if reservoir_slots:
+        for y_tab_r in RES_TAB_Y:
+            p = p.cut(box_at(x0 - 0.05, y_tab_r - TAB_W / 2, RES_SHELF_Z, T + 0.1, TAB_W, T))
     return p
 
 
@@ -77,7 +84,8 @@ def back_panel() -> cq.Workplane:
     p = p.cut(box_at(DIV_X, D - T - 0.05, SHELF_TOP + 3, T, T + 0.1, max(1.0, H - T - SHELF_TOP - 6)))
     for x in (T + INNER_L * 0.25, T + INNER_L * 0.75):
         p = p.cut(hole_y(D - T - 0.05, x, 28, HOSE_D / 2, T + 0.1))
-    p = p.cut(box_at(T + 18, D - T - 0.05, T + 6, 96, T + 0.1, 60))
+    # nicho só no compartimento esquerdo (longe da divisória)
+    p = p.cut(box_at(T + 20, D - T - 0.05, 18, 85, T + 0.1, 48))
     return p
 
 
@@ -114,8 +122,8 @@ def electronics_panel() -> cq.Workplane:
 
 
 def reservoir_shelf() -> cq.Workplane:
-    w, d = 140.0, 100.0
-    return box_at(-w, (D - d) / 2, 40.0, w, d, T)
+    w = 140.0
+    return box_at(-w, 0, RES_SHELF_Z, w, D, T)
 
 
 def pot_placeholder(cx, cy):
@@ -137,8 +145,8 @@ def sensor_placeholder(cx, cy):
 def build_assembly() -> cq.Assembly:
     assy = cq.Assembly(name="estrutura_frente_aberta_40cm")
     wood, wood_d = cq.Color(0.82, 0.70, 0.45), cq.Color(0.72, 0.60, 0.38)
-    assy.add(side_panel(0), name="lateral_esq", color=wood)
-    assy.add(side_panel(L - T), name="lateral_dir", color=wood)
+    assy.add(side_panel(0, reservoir_slots=True), name="lateral_esq", color=wood)
+    assy.add(side_panel(L - T, reservoir_slots=False), name="lateral_dir", color=wood)
     assy.add(back_panel(), name="traseira", color=wood_d)
     assy.add(horizontal(0), name="base", color=wood_d)
     assy.add(horizontal(SHELF_TOP - T, pots=True), name="prateleira", color=wood)

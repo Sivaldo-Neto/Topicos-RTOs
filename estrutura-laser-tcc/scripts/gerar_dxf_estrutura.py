@@ -169,6 +169,12 @@ def horizontal_outline() -> list[tuple[float, float]]:
 
 
 # ---------- peças ----------
+# Altura da face superior da prateleira do reservatório (mundo Z)
+RES_SHELF_Z = 40.0
+# Centros Y (profundidade local da lateral) dos tabs da prateleira do reservatório
+RES_TAB_Y = (28.0, 72.0)
+
+
 def draw_side(msp, ox, oy, name: str, electronics: bool):
     add_poly(msp, [(ox + x, oy + y) for x, y in side_outline()])
 
@@ -185,11 +191,10 @@ def draw_side(msp, ox, oy, name: str, electronics: bool):
                 add_circle(msp, cx + dx, cy + dy, 3.2)
         add_label(msp, ox + 3, oy + H - 6, f"{name} — eletrônica")
     else:
-        cx, cy = ox + 28, oy + 55
-        for dx in (0, 40):
-            for dy in (0, 35):
-                add_circle(msp, cx + dx, cy + dy, 3.2)
-        add_label(msp, ox + 3, oy + H - 6, f"{name} — reservatório")
+        # Slots horizontais para tabs da prateleira do reservatório (altura RES_SHELF_Z)
+        for y_tab in RES_TAB_Y:
+            add_rect(msp, ox + y_tab - TAB_W / 2, oy + RES_SHELF_Z, TAB_W, T)
+        add_label(msp, ox + 3, oy + H - 6, f"{name} — slots reservatório")
 
 
 def draw_back(msp, ox, oy):
@@ -199,7 +204,7 @@ def draw_back(msp, ox, oy):
     for xc in back_x_tabs():
         add_rect(msp, ox + xc - TAB_W / 2, oy + (SHELF_TOP - T), TAB_W, T)
 
-    # slots da divisória (2 segmentos)
+    # slots da divisória (2 segmentos) — ficam inteiros, longe do nicho
     x_div = DIV_X - T
     add_rect(msp, ox + x_div, oy + T + 3, T, max(1.0, (SHELF_TOP - T) - (T + 3) - 3))
     add_rect(msp, ox + x_div, oy + SHELF_TOP + 3, T, max(1.0, (H - T) - (SHELF_TOP + 3) - 3))
@@ -207,8 +212,14 @@ def draw_back(msp, ox, oy):
     add_circle(msp, ox + INNER_L * 0.25, oy + 28, HOSE_D)
     add_circle(msp, ox + INNER_L * 0.75, oy + 28, HOSE_D)
 
-    # nicho reservatório (recorte interno fechado)
-    add_rect(msp, ox + 18, oy + T + 6, 96, 60)
+    # Nicho só no compartimento esquerdo, longe da divisória e da base:
+    # margem ≥ 12 mm da base, ≥ 12 mm da divisória, abaixo da prateleira.
+    # x_div ≈ 125.5 → nicho termina em ≤ 110
+    niche_x, niche_w = 20.0, 85.0
+    niche_z, niche_h = 18.0, 48.0  # topo em z=66 < SHELF_TOP-T=82
+    assert niche_x + niche_w < x_div - 12
+    assert niche_z >= T + 12
+    add_rect(msp, ox + niche_x, oy + niche_z, niche_w, niche_h)
 
     add_label(msp, ox + 4, oy + H - 6, "TRASEIRA")
 
@@ -284,12 +295,21 @@ def draw_electronics_panel(msp, ox, oy):
 
 
 def draw_reservoir_shelf(msp, ox, oy):
-    w, d = 140.0, 100.0
-    add_poly(msp, [(ox, oy), (ox + w, oy), (ox + w, oy + d), (ox, oy + d)])
-    for sx in (18, 58):
-        for sy in (18, 53):
-            add_circle(msp, ox + sx, oy + sy, 3.2)
-    add_circle(msp, ox + w - 22, oy + d / 2, HOSE_D)
+    """
+    Prateleira horizontal do reservatório.
+    local X = afastamento da parede (0 = borda livre, w = encosta na lateral esq.)
+    local Y = profundidade (alinha com Y da caixa, 0..D)
+    Tabs na borda X=w entram nos slots da lateral esquerda em Z=RES_SHELF_Z.
+    """
+    w, d = 140.0, D  # mesma profundidade da caixa para alinhar os tabs
+    # contorno com 2 tabs na borda direita (parede)
+    pts = [(0, 0), (w, 0)]
+    for yc in RES_TAB_Y:
+        a, b = yc - TAB_W / 2, yc + TAB_W / 2
+        pts += [(w, a), (w + T, a), (w + T, b), (w, b)]
+    pts += [(w, d), (0, d), (0, 0)]
+    add_poly(msp, [(ox + x, oy + y) for x, y in pts])
+    add_circle(msp, ox + 25, oy + d / 2, HOSE_D)
     add_label(msp, ox + 3, oy + 3, "PRATELEIRA RESERVATÓRIO")
 
 
@@ -360,7 +380,7 @@ def main():
     place(lambda m, a, b: draw_horizontal(m, a, b, "tampa"), INNER_L + 2 * T + 8, INNER_D + 2 * T + 8)
     place(draw_divider, INNER_D + 2 * T + 8, H - 2 * T + 8)
     place(draw_electronics_panel, 70, 105)
-    place(draw_reservoir_shelf, 145, 105)
+    place(draw_reservoir_shelf, 140 + T + 8, D + 8)
 
     info_y = y + row_h + 26
     for i, line in enumerate(
