@@ -1,14 +1,20 @@
-Estrutura irrigacao TCC — resumo para corte
-===========================================
+Estrutura irrigacao TCC — frente ABERTA
+======================================
 
 Externo: 260 mm (C) x 100 mm (P) x 400 mm (A)
 Material: MDF 3 mm
-Vasos: 2x furo Ø90 mm na prateleira (topo da prateleira a 85 mm da base)
-HC-SR04: 2 sensores na tampa; distancia sensor -> substrato ≈ 312 mm
-Mangueira aquario: furos Ø10 mm
-Eletronica: painel na lateral direita
-Reservatorio: fora + nicho na traseira + prateleira lateral esquerda
+Sem painel frontal
+
+Vasos: 2x furo Ø86 mm (vaso 9 cm pela borda)
+Prateleira @ 85 mm da base
+HC-SR04 → substrato ≈ 312 mm
+Mangueira: Ø10 mm
+Kerf CAD: 0.10 mm
+
+Peças: 2 laterais, traseira, base, prateleira, tampa, divisória,
+       painel eletrônica, prateleira reservatório
 
 Firmware: trocar referencia 12.8 cm por ~31.2 cm (medir apos montar).
 
-Arquivo principal: output/estrutura_irrigacao_40cm_mdf3mm.dxf
+DXF: output/estrutura_irrigacao_40cm_mdf3mm.dxf
+3D:  output/montagem_estrutura_40cm.stl / .step / .glb

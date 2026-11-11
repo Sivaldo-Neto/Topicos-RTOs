@@ -1,6 +1,6 @@
 # Estrutura laser — protótipo Minha Horta (40 cm)
 
-Arquivo de corte a laser da caixa do TCC de irrigação automatizada, redimensionada para **altura total 40 cm**.
+Arquivo de corte a laser da caixa do TCC de irrigação automatizada, redimensionada para **altura total 40 cm**, com **frente aberta** (sem painel frontal).
 
 ## Arquivos
 
@@ -24,25 +24,22 @@ Arquivo de corte a laser da caixa do TCC de irrigação automatizada, redimensio
 | Profundidade externa | 100 mm |
 | Altura total externa | **400 mm** |
 | Material | MDF **3 mm** |
-| Vasos | 2 × furo Ø **90 mm** |
+| Vasos | 2 × furo Ø **86 mm** (prende pela borda do vaso 9 cm) |
 | Prateleira dos vasos (topo) | 85 mm a partir da base |
 | Distância HC-SR04 → substrato | **≈ 312 mm** |
 | Mangueira | furos Ø **10 mm** |
-| Kerf compensado no CAD | 0.12 mm |
-| Mesa | peças cabem em ~1050 × 860 mm (sua mesa 1300 × 1900 mm) |
+| Kerf compensado no CAD | 0.10 mm |
+| Frente | **aberta** (sem peça frontal) |
 
 ## Peças no DXF
 
-1. **FRENTE** — finger joints + slots + 2 furos de mangueira  
-2. **TRASEIRA** — igual à frente + **nicho** 110×70 mm para acoplar o reservatório  
-3. **LATERAL ESQ** — furos M3 para a prateleira do reservatório  
-4. **LATERAL DIR** — furos M3 para o painel da eletrônica  
-5. **BASE**  
-6. **TAMPA** — 2× HC-SR04 (olhos Ø16,2 mm + furos M3) alinhados aos vasos  
-7. **PRATELEIRA VASOS** — 2 furos Ø90 mm  
-8. **DIVISÓRIA CENTRAL**  
-9. **PAINEL ELETRONICA** — ventilação + furo de cabos (fixado na lateral direita)  
-10. **PRATELEIRA RESERVATORIO** + **ABA** — apoio externo do galão/caixa d’água  
+1. **LATERAL ESQ** — entalhes + furos do reservatório  
+2. **LATERAL DIR** — entalhes + furos da eletrônica  
+3. **TRASEIRA** — tabs laterais + nicho do reservatório  
+4. **BASE** / **PRATELEIRA VASOS** (Ø86) / **TAMPA** (2× HC-SR04)  
+5. **DIVISÓRIA CENTRAL**  
+6. **PAINEL ELETRÔNICA**  
+7. **PRATELEIRA RESERVATÓRIO**
 
 ## Camadas
 
@@ -51,13 +48,14 @@ Arquivo de corte a laser da caixa do TCC de irrigação automatizada, redimensio
 
 ## Montagem sugerida
 
-1. Encaixar **BASE** nos slots inferiores das 4 paredes + divisória.  
-2. Encaixar **PRATELEIRA VASOS** na altura dos slots intermediários.  
-3. Encaixar **TAMPA** no topo (sensores olhando para baixo).  
-4. Cola + grampos nos finger joints (cola de madeira / PVA).  
-5. Parafusar o **painel da eletrônica** na lateral direita (ESP32/protoboard).  
-6. Parafusar a **prateleira do reservatório** na lateral esquerda; o nicho da traseira ajuda a “atracar” o recipiente.  
-7. Passar mangueira de aquário pelos furos Ø10 e posicionar a bomba no reservatório (continua fora da caixa).
+1. Encaixar **BASE** nos entalhes inferiores das laterais + traseira.  
+2. Encaixar **DIVISÓRIA** nos slots da traseira / fendas dos painéis.  
+3. Encaixar **PRATELEIRA VASOS** nos slots intermediários.  
+4. Encaixar **TAMPA** nos entalhes superiores (HC-SR04 para baixo).  
+5. Cola PVA nos tabs + grampos até secar.  
+6. Parafusar o **painel da eletrônica** na lateral direita.  
+7. Parafusar a **prateleira do reservatório** na lateral esquerda.  
+8. Passar mangueira Ø10 e deixar o reservatório fora (nicho na traseira).
 
 ## Firmware
 
@@ -79,6 +77,6 @@ Parâmetros úteis: `SHELF_TOP`, `POT_HOLE_D`, `HOSE_D`, `KERF`, `H`.
 
 ### Observações
 
-- Com profundidade interna 94 mm e furo Ø90, sobram ~2 mm de borda na frente/trás da prateleira (igual à lógica do protótipo 10 cm). Se o vaso cair ou a borda ficar frágil, regenere com `POT_HOLE_D = 86` ou `88`.  
-- Calibre o **kerf** da sua máquina com um quadrado de teste; se o encaixe ficar folgado/apertado, ajuste `KERF` (0.08–0.20 mm é o intervalo usual em MDF 3 mm).  
-- O reservatório de 5 L permanece externo; o nicho + prateleira só organizam o acoplamento e a mangueira.
+- Furo Ø86 com profundidade interna 97 mm → ~5,5 mm de borda em cada lado. Se o vaso não assentar, ajuste `POT_HOLE_D` (84–88).  
+- Calibre o **kerf** com um quadrado de teste; intervalo usual em MDF 3 mm: 0.08–0.20 mm.  
+- Reservatório de 5 L continua externo; nicho + prateleira só organizam o acoplamento.
