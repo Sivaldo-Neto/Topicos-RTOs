@@ -8,7 +8,13 @@ Arquivo de corte a laser da caixa do TCC de irrigação automatizada, redimensio
 |---|---|
 | `output/estrutura_irrigacao_40cm_mdf3mm.dxf` | Cortar na laser (unidade: **mm**) |
 | `output/preview_pecas.png` | Vista das peças no nesting |
-| `scripts/gerar_dxf_estrutura.py` | Regenerar o DXF se mudar algum parâmetro |
+| `output/montagem_estrutura_40cm.stl` | Modelo 3D da montagem (STL) |
+| `output/montagem_estrutura_40cm.step` | Modelo 3D (STEP / CAD) |
+| `output/montagem_estrutura_40cm.glb` | Modelo 3D colorido (visualização) |
+| `output/viewer_montagem.html` | Viewer interativo (abrir junto com o `.glb`) |
+| `output/renders/` | Renders PNG da montagem |
+| `scripts/gerar_dxf_estrutura.py` | Regenerar o DXF |
+| `scripts/gerar_3d_montagem.py` | Regenerar o 3D / renders |
 
 ## Medidas adotadas
 
